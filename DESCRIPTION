@@ -4,7 +4,7 @@ Title: Accessing the 'CHILDES' Database
 Description: Tools for connecting to 'CHILDES', an open repository for
     transcripts of parent-child interaction. For more information on the
     underlying data, see <http://childes-db.stanford.edu>.
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),
     person("Alessandro", "Sanchez", email = "amsan7@gmail.com", role = c("aut", "ctb")),
@@ -22,10 +22,10 @@ Imports: DBI (>= 0.8), dbplyr (>= 1.2.1), dplyr (>= 0.7.4), jsonlite
         (>= 1.5), magrittr (>= 1.5), purrr (>= 0.2.4), RMySQL (>=
         0.10.14)
 Suggests: knitr, rmarkdown, curl
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-05-17 19:20:29 UTC; mikabr
+Packaged: 2019-04-25 21:46:41 UTC; mikabr
 Author: Mika Braginsky [aut, cre],
   Alessandro Sanchez [aut, ctb],
   Daniel Yurovsky [aut],
@@ -33,4 +33,4 @@ Author: Mika Braginsky [aut, cre],
   Stephan Meylan [ctb]
 Maintainer: Mika Braginsky <mika.br@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-05-18 12:32:18 UTC
+Date/Publication: 2019-04-25 22:10:03 UTC
