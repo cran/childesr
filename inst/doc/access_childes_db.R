@@ -2,6 +2,10 @@
 # load the library
 library(childesr)
 
+## ---- echo=FALSE, message=FALSE------------------------------------------
+can_connect <- check_connection()
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = can_connect)
+
 ## ------------------------------------------------------------------------
 d_transcripts <- get_transcripts()
 head(d_transcripts)

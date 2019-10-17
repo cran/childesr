@@ -20,13 +20,13 @@ translate_version <- function(db_version, db_args, db_info) {
     if (db_version == "current") {
       db_to_use <- db_info[["current"]]
       message("Using current database version: '", db_to_use, "'.")
-      return("childesdb")
+      return(db_to_use)
 
     # supported version
     } else if (db_version %in% db_info[["supported"]]) {
       db_to_use <- db_version
       message("Using supported database version: '", db_to_use, "'.")
-      return("childesdb")
+      return(db_to_use)
 
     # historical version
     } else if (db_version %in% db_info[["historical"]]) {
@@ -53,6 +53,20 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
   else connection
 }
 
+#' Get information on database connection options
+#'
+#' @return List of database info: host name, current version, supported
+#'   versions, historical versions, username, password
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' get_db_info()
+#' }
+get_db_info <- function() {
+  jsonlite::fromJSON("https://childes-db.stanford.edu/childes-db.json")
+}
+
 #' Connect to CHILDES
 #'
 #' @param db_version String of the name of database version to use
@@ -67,9 +81,7 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
 #' }
 connect_to_childes <- function(db_version = "current", db_args = NULL) {
 
-  db_info <- jsonlite::fromJSON(
-    "https://childes-db.stanford.edu/childes-db.json"
-  )
+  db_info <- get_db_info()
 
   if (is.null(db_args)) db_args <- db_info
 
@@ -82,6 +94,32 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
   )
   DBI::dbGetQuery(con, "SET NAMES utf8")
   return(con)
+}
+
+#' Check if connecting to childes db is possible
+#'
+#' @inheritParams connect_to_childes
+#'
+#' @return Logical indicating whether a connection was successfully formed
+#' @export
+check_connection <- function(db_version = "current", db_args = NULL) {
+  con <- tryCatch(connect_to_childes(db_version, db_args),
+                  error = function(e) NULL)
+  if (!is.null(con)) {
+    DBI::dbDisconnect(con)
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+#' Clear all MySQL connections
+#'
+#' @return
+#' @export
+clear_connections <- function() {
+  cons <- DBI::dbListConnections(RMySQL::MySQL())
+  purrr::walk(cons, DBI::dbDisconnect)
+  message(sprintf("Cleared %s connections", length(cons)))
 }
 
 #' Get table
@@ -329,13 +367,14 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
     speaker_statistics %<>% dplyr::filter(target_child_id %in% corpus_filter)
   }
 
-
   if (!is.null(age)) {
     if (!(length(age) %in% 1:2)) stop("`age` argument must be of length 1 or 2")
     days <- age * avg_month
     if (length(age) == 1) days <- c(days, days + avg_month)
-    speaker_statistics %<>% dplyr::filter(target_child_age >= days[1],
-                                          target_child_age <= days[2])
+    days_1 <- days[1]
+    days_2 <- days[2]
+    speaker_statistics %<>% dplyr::filter(target_child_age >= days_1,
+                                          target_child_age <= days_2)
   }
 
   if (!is.null(sex)) {
@@ -437,8 +476,10 @@ get_content <- function(content_type, collection = NULL, language = NULL,
     if (!(length(age) %in% 1:2)) stop("`age` argument must be of length 1 or 2")
     days <- age * avg_month
     if (length(age) == 1) days <- c(days, days + avg_month)
-    content %<>% dplyr::filter(target_child_age >= days[1],
-                               target_child_age <= days[2])
+    days_1 <- days[1]
+    days_2 <- days[2]
+    content %<>% dplyr::filter(target_child_age >= days_1,
+                               target_child_age <= days_2)
   }
 
   if (!is.null(sex)) {
@@ -658,10 +699,10 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
   contexts <- purrr::map2_df(utterance_orders$transcript_id,
                              utterance_orders$utterance_order,
                              function(tid, index) {
+    start <- index - window[1]
+    end <- index + window[2]
     utterances %>%
-      dplyr::filter(transcript_id == tid,
-                    utterance_order >= (index - window[1]),
-                    utterance_order <= (index + window[2])) %>%
+      dplyr::filter(transcript_id == tid, utterance_order >= start, utterance_order <= end) %>%
       dplyr::collect()
   })
 
