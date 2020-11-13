@@ -114,7 +114,6 @@ check_connection <- function(db_version = "current", db_args = NULL) {
 
 #' Clear all MySQL connections
 #'
-#' @return
 #' @export
 clear_connections <- function() {
   cons <- DBI::dbListConnections(RMySQL::MySQL())
@@ -240,8 +239,11 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #' @inheritParams get_transcripts
 #' @param role A character vector of one or more roles to include
 #' @param role_exclude A character vector of one or more roles to exclude
-#' @param age A numeric vector of an age or a min age (inclusive) and max age
-#'   (exclusive) in months
+#' @param age A numeric vector of an single age value or a min age value and max
+#'   age value (inclusive) in months. For a single age value, participants are
+#'   returned for which that age is within their age range; for two ages,
+#'   participants are returned for whose age overlaps with the interval between
+#'   those two ages.
 #' @param sex A character vector of values "male" and/or "female"
 #'
 #' @return A `tbl` of Participant data, filtered down by supplied arguments. If
@@ -277,7 +279,8 @@ get_participants <- function(collection = NULL, corpus = NULL,
     } else if (length(age) == 2) {
       days_1 <- days[1]
       days_2 <- days[2]
-      participants %<>% dplyr::filter(max_age >= days_1 | min_age <= days_2)
+      participants %<>% dplyr::filter((max_age >= days_1 & min_age <= days_2) |
+                                        (min_age <= days_2 & max_age >= days_1))
     } else {
       stop("`age` argument must be of length 1 or 2")
     }
@@ -440,11 +443,12 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 
   content <- dplyr::tbl(connection, content_type)
 
-  if (content_type %in% c("token", "token_frequency") & !is.null(token) &
+  if (content_type %in% c("token", "token_frequency") && !is.null(token) &&
       !identical("*", token)) {
-    token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
-      paste(collapse = " | ")
-    content %<>% dplyr::filter_(token_filter)
+
+    token_string <- paste0("gloss %like% '", token, "'", collapse = " | ")
+    token_expr <- parse(text = token_string)[[1]]
+    content %<>% dplyr::filter(!!token_expr)
   }
 
   if (!is.null(stem)) {
@@ -512,7 +516,8 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' @inheritParams connect_to_childes
 #' @inheritParams get_content
 #' @param replace A boolean indicating whether to replace "gloss" with
-#'   "replacement" (i.e. phonologically assimilated form), when available (defaults to \code{TRUE})
+#'   "replacement" (i.e. phonologically assimilated form), when available
+#'   (defaults to \code{TRUE})
 #'
 #' @return A `tbl` of Token data, filtered down by supplied arguments. If
 #'   `connection` is supplied, the result remains a remote query, otherwise it
@@ -702,7 +707,8 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
     start <- index - window[1]
     end <- index + window[2]
     utterances %>%
-      dplyr::filter(transcript_id == tid, utterance_order >= start, utterance_order <= end) %>%
+      dplyr::filter(transcript_id == tid, utterance_order >= start,
+                    utterance_order <= end) %>%
       dplyr::collect()
   })
 
@@ -716,27 +722,30 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
   return(contexts)
 }
 
-#' Get database version
+
+#' Run a SQL Query script on the CHILDES database
 #'
 #' @inheritParams connect_to_childes
-#' @inheritParams get_table
+#' @param sql_query_string A valid sql query string character
+#' @param connection A connection to the CHILDES database
 #'
-#' @return The database version as a string
+#' @return The database after calling the supplied SQL query
 #' @export
 #'
 #' @examples
 #' \donttest{
-#' get_database_version()
+#' get_sql_query("SELECT * FROM collection")
 #' }
-get_database_version <- function(connection = NULL, db_version = "current",
-                                 db_args = NULL) {
 
+get_sql_query <- function(sql_query_string, connection = NULL,
+                          db_version = "current", db_args = NULL) {
   con <- resolve_connection(connection, db_version, db_args)
-  admin <- dplyr::tbl(con, "admin") %>% dplyr::collect()
 
+  returned_sql_query <- dplyr::tbl(con, dplyr::sql(sql_query_string)) %>%
+    dplyr::collect()
   if (is.null(connection)) {
     DBI::dbDisconnect(con)
   }
-
-  return(admin$version[1])
+  return(returned_sql_query)
 }
+
