@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-10-01" />
+<meta name="date" content="2022-01-26" />
 
 <title>Accessing childes-db</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Accessing <code>childes-db</code></h1>
-<h4 class="date">2021-10-01</h4>
+<h4 class="date">2022-01-26</h4>
 
 
 <div id="TOC">
@@ -182,23 +182,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For example, you can run <code>get_transcripts</code> without any arguments to return all of the transcripts in the database.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>d_transcripts <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_transcripts)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 13
+##   transcript_id corpus_name   language date    filename         target_child_na…
+##           &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;            &lt;chr&gt;           
+## 1             1 English-Wolf… eng      &lt;NA&gt;    Frogs/English-W… Margaret        
+## 2             2 English-Wolf… eng      1989-0… Frogs/English-W… Zachary         
+## 3             3 English-Wolf… eng      1989-0… Frogs/English-W… Andrew          
+## 4             4 English-Wolf… eng      1989-0… Frogs/English-W… Christina       
+## 5             5 English-Wolf… eng      1989-0… Frogs/English-W… Christopher     
+## 6             6 English-Wolf… eng      1989-0… Frogs/English-W… Alexandra       
+## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_sex &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;</code></pre>
 <p>If you only want information about a specific collection, such as the English-American transcripts, then you can specify this in the collection argument.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>d_eng_na <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">collection =</span> <span class="st">&quot;Eng-NA&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_eng_na)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>d_eng_na <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">collection =</span> <span class="st">&quot;Eng-NA&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_eng_na)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 13
+##   transcript_id corpus_name language date  filename             target_child_na…
+##           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;           
+## 1          3629 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/amyan… &lt;NA&gt;            
+## 2          3630 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/amywe… &lt;NA&gt;            
+## 3          3631 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/ariga… &lt;NA&gt;            
+## 4          3632 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/arike… &lt;NA&gt;            
+## 5          3633 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/bende… &lt;NA&gt;            
+## 6          3634 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/bevfl… &lt;NA&gt;            
+## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_sex &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;</code></pre>
 <p>If you know the corpus that you want to analyze, then you can specify this in the corpus argument. The following function call will return information about all of the transcripts in the Brown corpus.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns all transcripts in the brown corpus</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>d_brown_transcripts <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of rows</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d_brown_transcripts)</span></code></pre></div>
-<p>If you want more than one corpus, then you can pass a multiple corpus names. You can also pass more than one name to the collections and child arguments.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d_many_corpora <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">corpus =</span> <span class="fu">c</span>(<span class="st">&quot;Brown&quot;</span>, <span class="st">&quot;Clark&quot;</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of rows</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d_many_corpora)</span></code></pre></div>
-<p>If you want transcript information about a specific child from a corpus, then you pass their name to the child argument. <em>Note</em> that the following function call will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d_shem <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">corpus =</span> <span class="fu">c</span>(<span class="st">&quot;Brown&quot;</span>, <span class="st">&quot;Clark&quot;</span>),</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">target_child =</span> <span class="st">&quot;Shem&quot;</span>)</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns all transcripts in the brown corpus</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>d_brown_transcripts <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of rows</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d_shem)</span></code></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d_brown_transcripts)</span></code></pre></div>
+<pre><code>## [1] 214</code></pre>
+<p>If you want more than one corpus, then you can pass a multiple corpus names. You can also pass more than one name to the collections and child arguments.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>d_many_corpora <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">corpus =</span> <span class="fu">c</span>(<span class="st">&quot;Brown&quot;</span>, <span class="st">&quot;Clark&quot;</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of rows</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d_many_corpora)</span></code></pre></div>
+<pre><code>## [1] 261</code></pre>
+<p>If you want transcript information about a specific child from a corpus, then you pass their name to the child argument. <em>Note</em> that the following function call will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>d_shem <span class="ot">&lt;-</span> <span class="fu">get_transcripts</span>(<span class="at">corpus =</span> <span class="fu">c</span>(<span class="st">&quot;Brown&quot;</span>, <span class="st">&quot;Clark&quot;</span>),</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">target_child =</span> <span class="st">&quot;Shem&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of rows</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d_shem)</span></code></pre></div>
+<pre><code>## [1] 47</code></pre>
 </div>
 <div id="get-participants" class="section level2">
 <h2>Get participants</h2>
@@ -212,58 +239,153 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>oldest age of transcript</li>
 </ul>
 <p>Again, if you run the function with no arguments, then you get all the background information for all speakers in the database.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d_participants <span class="ot">&lt;-</span> <span class="fu">get_participants</span>()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_participants)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>d_participants <span class="ot">&lt;-</span> <span class="fu">get_participants</span>()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_participants)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 18
+##      id code  name  role  corpus_name min_age max_age language group sex   ses  
+##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+## 1     1 CHI   Marg… Targ… English-Wo…    80.0    105. eng      &lt;NA&gt;  fema… MC   
+## 2     2 CHI   Chri… Targ… English-Wo…    77.0    105. eng      &lt;NA&gt;  fema… MC   
+## 3     3 INV   Nina  Inve… English-Wo…    NA       NA  eng      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; 
+## 4     4 CHI   Andr… Targ… English-Wo…    77.0    104. eng      &lt;NA&gt;  male  MC   
+## 5     5 CHI   Chri… Targ… English-Wo…    79.0    106. eng      &lt;NA&gt;  male  WC   
+## 6     6 CHI   Alex… Targ… English-Wo…    79.0    103. eng      &lt;NA&gt;  fema… WC   
+## # … with 7 more variables: education &lt;chr&gt;, custom &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;, target_child_name &lt;chr&gt;</code></pre>
 <p>The participants function introduces three new arguments: role, age, and sex. The role argument allows you to get information about a specific kind of speaker, such as the “target_child.”</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>d_target_child <span class="ot">&lt;-</span> <span class="fu">get_participants</span>(<span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_target_child)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d_target_child <span class="ot">&lt;-</span> <span class="fu">get_participants</span>(<span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_target_child)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 18
+##      id code  name  role  corpus_name min_age max_age language group sex   ses  
+##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+## 1     1 CHI   Marg… Targ… English-Wo…    80.0    105. eng      &lt;NA&gt;  fema… MC   
+## 2     2 CHI   Chri… Targ… English-Wo…    77.0    105. eng      &lt;NA&gt;  fema… MC   
+## 3     4 CHI   Andr… Targ… English-Wo…    77.0    104. eng      &lt;NA&gt;  male  MC   
+## 4     5 CHI   Chri… Targ… English-Wo…    79.0    106. eng      &lt;NA&gt;  male  WC   
+## 5     6 CHI   Alex… Targ… English-Wo…    79.0    103. eng      &lt;NA&gt;  fema… WC   
+## 6     7 CHI   Mich… Targ… English-Wo…    79.0    105. eng      &lt;NA&gt;  male  WC   
+## # … with 7 more variables: education &lt;chr&gt;, custom &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;, target_child_name &lt;chr&gt;</code></pre>
 <p>The age argument takes a number indicating the age(s) of children (in months) that you want to analyze. you can use this argument in two ways</p>
 <ol style="list-style-type: decimal">
 <li>Pass a single number to information about all participants who have a transcript at that age.</li>
 <li>Pass a range of ages to get information about all participants who have transcript within a certain age range.</li>
 </ol>
 <p>For example, you can get the participant information for all of the children who had transcripts between the ages of 24 and 36 months.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>d_age_range <span class="ot">&lt;-</span> <span class="fu">get_participants</span>(<span class="at">age =</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">36</span>))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_age_range)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>d_age_range <span class="ot">&lt;-</span> <span class="fu">get_participants</span>(<span class="at">age =</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">36</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d_age_range)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 18
+##      id code  name  role  corpus_name min_age max_age language group sex   ses  
+##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+## 1  1598 CHI   &lt;NA&gt;  Targ… Chinese-Ta…    32.2    60.6 zho      &lt;NA&gt;  male  &lt;NA&gt; 
+## 2  1669 CHI   Ian   Targ… Garvey         34.0    34.0 eng      &lt;NA&gt;  male  &lt;NA&gt; 
+## 3  1679 CHI   Nan   Targ… Garvey         34.0    34.0 eng      &lt;NA&gt;  fema… &lt;NA&gt; 
+## 4  1688 NAN   Nan   Targ… Garvey         34.0    34.0 eng      &lt;NA&gt;  fema… &lt;NA&gt; 
+## 5  1701 CHI   Sam   Targ… Garvey         35.0    35.0 eng      &lt;NA&gt;  male  &lt;NA&gt; 
+## 6  1702 CHI   &lt;NA&gt;  Targ… Valian         21.7    32.8 eng      TD    fema… &lt;NA&gt; 
+## # … with 7 more variables: education &lt;chr&gt;, custom &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;, target_child_name &lt;chr&gt;</code></pre>
 </div>
 <div id="get-tokens" class="section level2">
 <h2>Get tokens</h2>
 <p>The <code>get_tokens</code> function returns a table with a row for each token based on a set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.</p>
 <p>For example, if you wanted to get all of the production data for a specific token(s), then you could run the following call to get all instances of “dog” and “ball” for Adam in the Brown corpus.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>d_adam_prod <span class="ot">&lt;-</span> <span class="fu">get_tokens</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">token =</span> <span class="fu">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;ball&quot;</span>))</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># view the structure of the data</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(d_adam_prod)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># print the unique tokens</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(d_adam_prod<span class="sc">$</span>gloss)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>d_adam_prod <span class="ot">&lt;-</span> <span class="fu">get_tokens</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">token =</span> <span class="fu">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;ball&quot;</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># view the structure of the data</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(d_adam_prod)</span></code></pre></div>
+<pre><code>## tibble [265 × 28] (S3: tbl_df/tbl/data.frame)
+##  $ id               : int [1:265] 7557235 7557298 7557590 7557593 7557787 7557840 7558259 7558391 7558393 7559092 ...
+##  $ gloss            : chr [1:265] &quot;dog&quot; &quot;ball&quot; &quot;ball&quot; &quot;ball&quot; ...
+##  $ language         : chr [1:265] &quot;eng&quot; &quot;eng&quot; &quot;eng&quot; &quot;eng&quot; ...
+##  $ token_order      : int [1:265] 3 2 2 3 1 3 2 1 1 1 ...
+##  $ prefix           : chr [1:265] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ part_of_speech   : chr [1:265] &quot;n&quot; &quot;n&quot; &quot;n&quot; &quot;n&quot; ...
+##  $ stem             : chr [1:265] &quot;dog&quot; &quot;ball&quot; &quot;ball&quot; &quot;ball&quot; ...
+##  $ actual_phonology : chr [1:265] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ model_phonology  : chr [1:265] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ suffix           : chr [1:265] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ num_morphemes    : int [1:265] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ english          : chr [1:265] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ clitic           : chr [1:265] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ utterance_type   : chr [1:265] &quot;declarative&quot; &quot;declarative&quot; &quot;declarative&quot; &quot;declarative&quot; ...
+##  $ corpus_name      : chr [1:265] &quot;Brown&quot; &quot;Brown&quot; &quot;Brown&quot; &quot;Brown&quot; ...
+##  $ speaker_code     : chr [1:265] &quot;CHI&quot; &quot;CHI&quot; &quot;CHI&quot; &quot;CHI&quot; ...
+##  $ speaker_name     : chr [1:265] &quot;Adam&quot; &quot;Adam&quot; &quot;Adam&quot; &quot;Adam&quot; ...
+##  $ speaker_role     : chr [1:265] &quot;Target_Child&quot; &quot;Target_Child&quot; &quot;Target_Child&quot; &quot;Target_Child&quot; ...
+##  $ target_child_name: chr [1:265] &quot;Adam&quot; &quot;Adam&quot; &quot;Adam&quot; &quot;Adam&quot; ...
+##  $ target_child_age : num [1:265] 27.1 27.1 27.1 27.1 27.1 ...
+##  $ target_child_sex : chr [1:265] &quot;male&quot; &quot;male&quot; &quot;male&quot; &quot;male&quot; ...
+##  $ collection_name  : chr [1:265] &quot;Eng-NA&quot; &quot;Eng-NA&quot; &quot;Eng-NA&quot; &quot;Eng-NA&quot; ...
+##  $ collection_id    : int [1:265] 2 2 2 2 2 2 2 2 2 2 ...
+##  $ corpus_id        : int [1:265] 60 60 60 60 60 60 60 60 60 60 ...
+##  $ speaker_id       : int [1:265] 3327 3327 3327 3327 3327 3327 3327 3327 3327 3327 ...
+##  $ target_child_id  : int [1:265] 3327 3327 3327 3327 3327 3327 3327 3327 3327 3327 ...
+##  $ transcript_id    : int [1:265] 7263 7263 7263 7263 7263 7263 7265 7265 7265 7264 ...
+##  $ utterance_id     : int [1:265] 1759848 1759936 1760126 1760127 1760262 1760293 1763420 1763944 1763967 1764045 ...</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the unique tokens</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(d_adam_prod<span class="sc">$</span>gloss)</span></code></pre></div>
+<pre><code>## [1] &quot;dog&quot;  &quot;ball&quot;</code></pre>
 </div>
 <div id="get-types" class="section level2">
 <h2>Get types</h2>
 <p>The <code>get_types()</code> function works like the <code>get_tokens()</code> function, returning a table with a row for each type based on set of filtering criteria. The type argument allows you to pass a vector of one or more types that you want to analyze. The main difference is that you now have a single row for each type (i.e., a concept) and a variable <code>count</code> that tracks the number of times that type appeared in a particular transcript.</p>
 <p>For example, if you wanted to get all of the production data for a specific type(s), then you could run the following call to get counts of “dog” and “ball” for all of Adam’s transcripts in the Brown corpus.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>d_adam_types <span class="ot">&lt;-</span> <span class="fu">get_types</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;ball&quot;</span>))</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of times ball appears in the first transcript</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(d_adam_types<span class="sc">$</span>gloss[<span class="dv">1</span>], d_adam_types<span class="sc">$</span>count[<span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>d_adam_types <span class="ot">&lt;-</span> <span class="fu">get_types</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;ball&quot;</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of times ball appears in the first transcript</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(d_adam_types<span class="sc">$</span>gloss[<span class="dv">1</span>], d_adam_types<span class="sc">$</span>count[<span class="dv">1</span>])</span></code></pre></div>
+<pre><code>## [1] &quot;ball&quot; &quot;26&quot;</code></pre>
 </div>
 <div id="get-utterances" class="section level2">
 <h2>Get utterances</h2>
 <p>The <code>get_utterances</code> function returns a table with a row for each utterance based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Brown Corpus for the child Adam.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>d_adam_utts <span class="ot">&lt;-</span> <span class="fu">get_utterances</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># view the structure of the data</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(d_adam_utts)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># print the first five utterances</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>d_adam_utts<span class="sc">$</span>gloss[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>d_adam_utts <span class="ot">&lt;-</span> <span class="fu">get_utterances</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># view the structure of the data</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(d_adam_utts)</span></code></pre></div>
+<pre><code>## tibble [73,431 × 27] (S3: tbl_df/tbl/data.frame)
+##  $ id               : int [1:73431] 1759250 1759256 1759261 1759264 1759269 1759274 1759279 1759284 1759289 1759294 ...
+##  $ gloss            : chr [1:73431] &quot;play checkers&quot; &quot;big drum&quot; &quot;big drum&quot; &quot;big drum&quot; ...
+##  $ stem             : chr [1:73431] &quot;play checker&quot; &quot;big drum&quot; &quot;big drum&quot; &quot;big drum&quot; ...
+##  $ actual_phonology : chr [1:73431] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ model_phonology  : chr [1:73431] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ type             : chr [1:73431] &quot;declarative&quot; &quot;declarative&quot; &quot;question&quot; &quot;declarative&quot; ...
+##  $ language         : chr [1:73431] &quot;eng&quot; &quot;eng&quot; &quot;eng&quot; &quot;eng&quot; ...
+##  $ num_morphemes    : int [1:73431] 3 2 2 2 2 2 1 1 2 4 ...
+##  $ num_tokens       : int [1:73431] 2 2 2 2 2 2 1 1 2 3 ...
+##  $ utterance_order  : int [1:73431] 1 2 3 4 5 6 7 8 9 10 ...
+##  $ corpus_name      : chr [1:73431] &quot;Brown&quot; &quot;Brown&quot; &quot;Brown&quot; &quot;Brown&quot; ...
+##  $ part_of_speech   : chr [1:73431] &quot;n n&quot; &quot;adj n&quot; &quot;adj n&quot; &quot;adj n&quot; ...
+##  $ speaker_code     : chr [1:73431] &quot;CHI&quot; &quot;CHI&quot; &quot;MOT&quot; &quot;CHI&quot; ...
+##  $ speaker_name     : chr [1:73431] &quot;Adam&quot; &quot;Adam&quot; NA &quot;Adam&quot; ...
+##  $ speaker_role     : chr [1:73431] &quot;Target_Child&quot; &quot;Target_Child&quot; &quot;Mother&quot; &quot;Target_Child&quot; ...
+##  $ target_child_name: chr [1:73431] &quot;Adam&quot; &quot;Adam&quot; &quot;Adam&quot; &quot;Adam&quot; ...
+##  $ target_child_age : num [1:73431] 27.1 27.1 27.1 27.1 27.1 ...
+##  $ target_child_sex : chr [1:73431] &quot;male&quot; &quot;male&quot; &quot;male&quot; &quot;male&quot; ...
+##  $ media_start      : num [1:73431] NA NA NA NA NA NA NA NA NA NA ...
+##  $ media_end        : num [1:73431] NA NA NA NA NA NA NA NA NA NA ...
+##  $ media_unit       : chr [1:73431] NA NA NA NA ...
+##  $ collection_name  : chr [1:73431] &quot;Eng-NA&quot; &quot;Eng-NA&quot; &quot;Eng-NA&quot; &quot;Eng-NA&quot; ...
+##  $ collection_id    : int [1:73431] 2 2 2 2 2 2 2 2 2 2 ...
+##  $ corpus_id        : int [1:73431] 60 60 60 60 60 60 60 60 60 60 ...
+##  $ speaker_id       : int [1:73431] 3327 3327 3329 3327 3327 3327 3327 3329 3327 3329 ...
+##  $ target_child_id  : int [1:73431] 3327 3327 3327 3327 3327 3327 3327 3327 3327 3327 ...
+##  $ transcript_id    : int [1:73431] 7263 7263 7263 7263 7263 7263 7263 7263 7263 7263 ...</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the first five utterances</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>d_adam_utts<span class="sc">$</span>gloss[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<pre><code>## [1] &quot;play checkers&quot; &quot;big drum&quot;      &quot;big drum&quot;      &quot;big drum&quot;     
+## [5] &quot;big drum&quot;</code></pre>
 </div>
 <div id="get-speaker-statistics" class="section level2">
 <h2>Get speaker statistics</h2>
@@ -277,18 +399,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>mean length of utterances in morphemes (<code>mlu_m</code>)</li>
 </ul>
 <p>For example, if we wanted to get the summary statistics for Adam’s production data, we could run the following call.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>d_adam_stats <span class="ot">&lt;-</span> <span class="fu">get_speaker_statistics</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get the average mlu across all Adam&#39;s transcripts</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(d_adam_stats<span class="sc">$</span>mlu_w)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>d_adam_stats <span class="ot">&lt;-</span> <span class="fu">get_speaker_statistics</span>(<span class="at">corpus =</span> <span class="st">&quot;Brown&quot;</span>,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">target_child =</span> <span class="st">&quot;Adam&quot;</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">role =</span> <span class="st">&quot;target_child&quot;</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get the average mlu across all Adam&#39;s transcripts</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(d_adam_stats<span class="sc">$</span>mlu_w)</span></code></pre></div>
+<pre><code>## [1] 3.559118</code></pre>
 <div id="get-sql-query" class="section level3">
 <h3>Get SQL Query</h3>
 <p>The <code>get_sql_query()</code> function returns a table from a SQL query run on the specified database. For example, if you wanted to see the top 10 corpora in the <code>Eng-NA</code> collection with the highest count of token for “dog”, you could run the following call.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d_na_dog <span class="ot">&lt;-</span> <span class="fu">get_sql_query</span>(<span class="st">&quot;SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = &#39;Eng-NA&#39; AND gloss = &#39;dog&#39; GROUP BY corpus_name&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">arrange</span>(d_na_dog, <span class="fu">desc</span>(count))</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>d_na_dog <span class="ot">&lt;-</span> <span class="fu">get_sql_query</span>(<span class="st">&quot;SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = &#39;Eng-NA&#39; AND gloss = &#39;dog&#39; GROUP BY corpus_name&quot;</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">arrange</span>(d_na_dog, <span class="fu">desc</span>(count))</span></code></pre></div>
+<pre><code>## # A tibble: 55 × 2
+##    corpus_name  count
+##    &lt;chr&gt;        &lt;dbl&gt;
+##  1 HSLLD         1261
+##  2 Providence     862
+##  3 Brown          546
+##  4 Gelman         537
+##  5 Weist          437
+##  6 NewmanRatner   433
+##  7 Suppes         421
+##  8 Hall           337
+##  9 Brent          277
+## 10 Davis          241
+## # … with 45 more rows</code></pre>
 </div>
 </div>
 

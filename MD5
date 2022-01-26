@@ -1,12 +1,12 @@
-3adacb20a132219c683341e505cb72f2 *DESCRIPTION
+d40ea297b9604caf07a264265edbf357 *DESCRIPTION
 e959f587a9efeff5180a1166d6295b67 *NAMESPACE
-1ca988e6903ddc0c69393dfef4b55ac1 *NEWS.md
-c6596598eb6f01a41d7d4678a87aa38b *R/childesr.R
+0b9b96a8ef1edd78f12fc1f0b3a04a4c *NEWS.md
+6f53a74cbb66557ff3453264a95702b2 *R/childesr.R
 673626c803eb92262a4a81ddcd3298ce *README.md
 470de830f02e9d1d440f03f9f47345a0 *build/vignette.rds
-5aefcd78e50f098b735cd56e86b37afa *inst/doc/access_childes_db.R
+0c67745181176cdf3dc09a421e3b53b2 *inst/doc/access_childes_db.R
 1b6c6e61109f98962d190d4188f3c7f2 *inst/doc/access_childes_db.Rmd
-54d7ded4b78066df4280af37de5d2a52 *inst/doc/access_childes_db.html
+6cdbb51d0bd04b4d193182a1bc6e5f4b *inst/doc/access_childes_db.html
 6728ef827cd03cdf8308a737851eae89 *man/clear_connections.Rd
 bac8d18029bac1407f867f16420f39e9 *man/connect_to_childes.Rd
 990d2141e34761a90e79acf3ee3b5968 *man/get_collections.Rd
