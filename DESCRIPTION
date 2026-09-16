@@ -2,35 +2,41 @@ Package: childesr
 Type: Package
 Title: Accessing the 'CHILDES' Database
 Description: Tools for connecting to 'CHILDES', an open repository for
-    transcripts of parent-child interaction. For more information on the 
+    transcripts of parent-child interaction. For more information on the
     underlying data, see <https://langcog.github.io/childes-db-website/>.
-Version: 0.2.3
+Version: 0.3.0
 Authors@R: c(
-    person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),
+    person("Michael C.", "Frank", email = "mcfrank@stanford.edu", role = c("aut", "cre", "cph")),
+    person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut")),
     person("Alessandro", "Sanchez", email = "amsan7@gmail.com", role = c("aut", "ctb")),
     person("Daniel", "Yurovsky", email = "dyurovsky@gmail.com", role = c("aut")),
     person("Kyle", "MacDonald", email = "kylem412@gmail.com", role = c("ctb")),
     person("Stephan", "Meylan", email = "meylan.stephan@gmail.com", role = c("ctb")),
     person("Jessica", "Mankewitz", email="jmankewitz@gmail.com", role=c("ctb"))
     )
-Depends: R (>= 4.0)
+Depends: R (>= 4.4)
 License: GPL-3
-URL: https://github.com/langcog/childesr
+URL: https://github.com/langcog/childesr,
+        https://langcog.github.io/childesr/
 BugReports: https://github.com/langcog/childesr/issues
 Encoding: UTF-8
-Imports: DBI (>= 1.1), dbplyr (>= 2.1), dplyr (>= 1.0), jsonlite (>=
-        1.7), magrittr (>= 2.0), purrr (>= 0.3), RMySQL (>= 0.10.21)
-Suggests: knitr, rmarkdown, curl
-RoxygenNote: 7.1.1
+Imports: dplyr (>= 1.2), jsonlite (>= 2.0), magrittr (>= 2.0), purrr
+        (>= 1.0), rlang (>= 1.1)
+Suggests: redivis (>= 0.11.0), knitr, rmarkdown, curl, testthat (>=
+        3.0.0)
+Additional_repositories: https://langcog.r-universe.dev
+Config/testthat/edition: 3
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-01-26 23:47:41 UTC; jessicamankewitz
-Author: Mika Braginsky [aut, cre],
+Packaged: 2026-09-16 00:12:19 UTC; mcfrank
+Author: Michael C. Frank [aut, cre, cph],
+  Mika Braginsky [aut],
   Alessandro Sanchez [aut, ctb],
   Daniel Yurovsky [aut],
   Kyle MacDonald [ctb],
   Stephan Meylan [ctb],
   Jessica Mankewitz [ctb]
-Maintainer: Mika Braginsky <mika.br@gmail.com>
+Maintainer: Michael C. Frank <mcfrank@stanford.edu>
 Repository: CRAN
-Date/Publication: 2022-01-27 00:00:02 UTC
+Date/Publication: 2026-09-16 07:10:02 UTC
